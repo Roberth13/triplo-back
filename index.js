@@ -35,10 +35,7 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
-async function getOlx(_data){
-  let respp= '';
-  
-}
+
 app.post('/api/v1/quotes/olxautos', function (req, res) {
   let _data = req.body;
   let opt = {
@@ -73,5 +70,5 @@ app.use((err, req, res, next) => {
   return;
 });
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Example app listening ${port}`);
 });
