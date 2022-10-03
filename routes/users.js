@@ -25,8 +25,6 @@ router.get('/:id', async function(req, res, next) {
 /* Create user */
 router.post('/', async function(req, res, next) {
   try {
-    console.log("BODY")
-    console.log(req.body);
     res.json(await usersServices.create(req.body));
   } catch (err) {
     console.error(`Error while creating user `, err.message);

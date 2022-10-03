@@ -1,13 +1,14 @@
 const express = require("express");
 const fetch = require('node-fetch');
 const app = express();
-const port = 3000;
+const port = 5000;
 const usersRoutes = require("./routes/users");
 const makesRoutes = require("./routes/makes");
 const yearsRoutes = require("./routes/years");
 const versionsRoutes = require("./routes/versions");
 const modelsRoutes = require("./routes/models");
 const quotesRoutes = require("./routes/quotes");
+const findCarRoutes = require("./routes/findcar");
 
 app.use(express.json());
 app.use(
@@ -61,6 +62,7 @@ app.use("/api/v1/years", yearsRoutes);
 app.use("/api/v1/versions", versionsRoutes);
 app.use("/api/v1/models", modelsRoutes);
 app.use("/api/v1/quotes", quotesRoutes);
+app.use("/api/v1/findcar", findCarRoutes);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {

@@ -1,9 +1,9 @@
 const config = {
     db: {
-      host: "localhost",
-      user: "root",
-      password: "",
-      database: "triplodb",
+      host: "database-triplo-instance.c1y11qnye1my.us-east-1.rds.amazonaws.com",
+      user: "admin_tri_user",
+      password: "SqYzd74B8p",
+      database: "triplo_database",
     },
     listPerPage: 10,
   };
