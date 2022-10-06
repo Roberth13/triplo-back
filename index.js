@@ -10,6 +10,7 @@ const modelsRoutes = require("./routes/models");
 const quotesRoutes = require("./routes/quotes");
 const findCarRoutes = require("./routes/findcar");
 const uploadRoutes = require("./routes/upload");
+const db = require('./services/db');
 
 app.use(express.json());
 app.use(
@@ -55,7 +56,41 @@ app.post('/api/v1/quotes/olxautos', function (req, res) {
     res.send(response.data.quote);
   })
   .catch(err => console.error(err));
-})
+});
+
+app.post('/api/v1/versions/setversion', function (req, res) {
+  let _data = req.body;
+  let opt = {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `{
+        variant(sitecode:"olxco",filter:{category_id:378,make:"${_data.make}",year:"${_data.year}",model:"${_data.model}"})
+        {
+            list{
+              name
+            }
+        }
+      }`,
+    }),
+  }
+  fetch('https://api.olxautos.cl/groot/api/v1/category/value', opt)
+  .then(response => response.json())
+  .then(response => {
+    let data = response.data.variant.list;
+    if(data.length > 0){
+      data.forEach(ele =>{
+        console.log(`INSERT INTO versions (name, model_id) VALUES ("${ele.name}", ${_data.model_id})`);
+        db.query(
+          `INSERT INTO versions (name, model_id) VALUES ("${ele.name}", ${_data.model_id})`
+        );
+      })
+    }
+
+    res.send(response.data.variant.list);
+  })
+  .catch(err => console.error(err));
+});
 
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/makes", makesRoutes);
