@@ -35,10 +35,24 @@ async function getModelsByYear(yearId){
     data
   }
 }
+async function createByYear(year, models){
+  let result;
+  let message = 'Error in creating model';
+  await models.items.forEach((model) => {
+    result = db.query(
+      `INSERT INTO models (name, year_id) VALUES ("${model}", ${year})`
+    );
 
+    if (result.affectedRows) {
+      message = 'Models created successfully';
+    }
+  });
+
+  return {message};
+}
 async function create(model){
   const result = await db.query(
-    `INSERT INTO models (name, make_id, year_id) VALUES ("${model.name}", ${model.make_id}, ${model.year_id})`
+    `INSERT INTO models (name, year_id) VALUES ("${model.name}", ${model.year_id})`
   );
 
   let message = 'Error in creating model';
@@ -102,5 +116,6 @@ module.exports = {
     getModel,
     remove,
     update,
-    getModelsByYear
+    getModelsByYear,
+    createByYear
 }

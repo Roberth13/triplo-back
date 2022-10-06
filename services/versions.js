@@ -87,11 +87,27 @@ async function update(id, version){
   return {message};
 }
 
+async function createByModel(model, versions){
+  let result;
+  let message = 'Error in creating model';
+  await versions.items.forEach((version) => {
+    result = db.query(
+      `INSERT INTO versions (name, model_id) VALUES ("${version}", ${model})`
+    );
+
+    if (result.affectedRows) {
+      message = 'Versions created successfully';
+    }
+  });
+
+  return {message};
+}
 module.exports = {
     getVersions,
     create,
     getVersion,
     remove,
     update,
-    getVersionByModel
+    getVersionByModel,
+    createByModel
 }

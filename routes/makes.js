@@ -21,6 +21,15 @@ router.get('/:id', async function(req, res, next) {
     next(err);
   }
 });
+/* GET make by Name*/
+router.get('/s/:name', async function(req, res, next) {
+  try {
+    res.json(await makesServices.getMakeByName(req.params.name));
+  } catch (err) {
+    console.error(`Error while getting make `, err.message);
+    next(err);
+  }
+});
 
 /* Create Make */
 router.post('/', async function(req, res, next) {

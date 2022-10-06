@@ -62,4 +62,14 @@ router.get('/s/:id', async function(req, res, next) {
   }
 });
 
+/* Create models */
+router.post('/y/:model_id', async function(req, res, next) {
+  try {
+    res.json(await versionsServices.createByModel(req.params.model_id,req.body));
+  } catch (err) {
+    console.error(`Error while creating versions `, err.message);
+    next(err);
+  }
+});
+
 module.exports = router;

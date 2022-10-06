@@ -5,6 +5,14 @@ const config = {
       password: "SqYzd74B8p",
       database: "triplo_database",
     },
+    // db: {
+    //   host: "localhost",
+    //   user: "root",
+    //   password: "",
+    //   database: "triplodb",
+    //   connectionLimit:5000
+    // },
+
     listPerPage: 10,
   };
 module.exports = config;

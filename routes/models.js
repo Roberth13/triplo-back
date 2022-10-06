@@ -42,6 +42,16 @@ router.post('/', async function(req, res, next) {
   }
 });
 
+/* Create models */
+router.post('/y/:year_id', async function(req, res, next) {
+  try {
+    res.json(await modelsServices.createByYear(req.params.year_id,req.body));
+  } catch (err) {
+    console.error(`Error while creating model `, err.message);
+    next(err);
+  }
+});
+
 /* PUT model */
 router.put('/:id', async function(req, res, next) {
   try {

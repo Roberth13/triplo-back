@@ -42,6 +42,15 @@ async function getMake(id){
   }
 }
 
+function getMakeByName(name){
+  const result = db.query(
+    `SELECT * FROM MAKES WHERE name = "${name}"`
+  );
+  const data = helper.emptyOrRows(result);
+
+  return {data};
+}
+
 async function remove(id){
   const result = await db.query(
     `DELETE FROM MAKES WHERE id=${id}`
@@ -76,5 +85,6 @@ module.exports = {
   create,
   getMake,
   remove,
-  update
+  update,
+  getMakeByName
 }

@@ -9,6 +9,7 @@ const versionsRoutes = require("./routes/versions");
 const modelsRoutes = require("./routes/models");
 const quotesRoutes = require("./routes/quotes");
 const findCarRoutes = require("./routes/findcar");
+const uploadRoutes = require("./routes/upload");
 
 app.use(express.json());
 app.use(
@@ -63,6 +64,7 @@ app.use("/api/v1/versions", versionsRoutes);
 app.use("/api/v1/models", modelsRoutes);
 app.use("/api/v1/quotes", quotesRoutes);
 app.use("/api/v1/findcar", findCarRoutes);
+app.use("/api/v1/upload", uploadRoutes);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {

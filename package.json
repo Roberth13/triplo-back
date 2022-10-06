@@ -14,10 +14,12 @@
   "dependencies": {
     "browserless": "^9.6.10",
     "express": "^4.18.1",
+    "express-fileupload": "^1.4.0",
     "html-get": "^2.9.22",
     "mysql2": "^2.3.3",
     "node-fetch": "^2.6.1",
-    "node-html-parser": "^6.1.1"
+    "node-html-parser": "^6.1.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
