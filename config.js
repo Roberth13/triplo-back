@@ -9,8 +9,7 @@ const config = {
     //   host: "localhost",
     //   user: "root",
     //   password: "",
-    //   database: "triplodb",
-    //   connectionLimit:5000
+    //   database: "triplodb2"
     // },
 
     listPerPage: 10,
