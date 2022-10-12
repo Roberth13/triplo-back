@@ -19,7 +19,7 @@ async function getVersions(page){
 
 async function getVersionByModel(modelId){
   const result = await db.query(
-    `select v.id, v.name
+    `select v.id, v.name, v.calculate_price
     from versions v
     where v.model_id = ${modelId} ORDER by v.name asc;`
   );

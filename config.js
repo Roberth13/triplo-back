@@ -9,7 +9,7 @@ const config = {
     //   host: "localhost",
     //   user: "root",
     //   password: "",
-    //   database: "triplodb"
+    //   database: "triplo_db"
     // },
 
     listPerPage: 10,
