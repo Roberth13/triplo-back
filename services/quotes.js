@@ -98,12 +98,12 @@ async function getTest(data){
   if(resp.length > 0)
     _prom = _prom / resp.length;
   
-    try {
-      server.send("roberthalexander13@gmail.com", "Test email", "Este es un email de prueba..", "<p>Este es un <b>email</b> de prueba..</p>");
-      console.log("Sending...")
-    } catch (error) {
-      console.log("Error"+error)
-    }
+    // try {
+    //   server.send("roberthalexander13@gmail.com", "Test email", "Este es un email de prueba..", "<p>Este es un <b>email</b> de prueba..</p>");
+    //   console.log("Sending...")
+    // } catch (error) {
+    //   console.log("Error"+error)
+    // }
   
   
   return { data: resp, count: resp.length, prom: Math.round(_prom) }

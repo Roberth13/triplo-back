@@ -9,8 +9,8 @@ let transporter = nodemailer.createTransport({
         ciphers:'SSLv3'
     },
     auth: {
-      user: "roberth.ortiz@triplo.com.co", // generated ethereal user
-      pass: "Triplo2022", // generated ethereal password
+      user: "", // generated ethereal user
+      pass: "", // generated ethereal password
     },
 });
 
