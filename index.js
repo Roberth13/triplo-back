@@ -10,6 +10,7 @@ const modelsRoutes = require("./routes/models");
 const quotesRoutes = require("./routes/quotes");
 const findCarRoutes = require("./routes/findcar");
 const uploadRoutes = require("./routes/upload");
+const pricesRoutes = require("./routes/prices");
 const db = require('./services/db');
 
 app.use(express.json());
@@ -100,6 +101,7 @@ app.use("/api/v1/models", modelsRoutes);
 app.use("/api/v1/quotes", quotesRoutes);
 app.use("/api/v1/findcar", findCarRoutes);
 app.use("/api/v1/upload", uploadRoutes);
+app.use("/api/v1/prices", pricesRoutes);
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {

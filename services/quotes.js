@@ -4,6 +4,7 @@ const createBrowserless = require('browserless')
 const getHTML = require('html-get')
 const browserlessFactory = createBrowserless()
 var HTMLParser = require('node-html-parser');
+const server = require('./server');
 
 process.on('exit', () => {
   console.log('closing resources!')
@@ -96,6 +97,15 @@ async function getTest(data){
   // }
   if(resp.length > 0)
     _prom = _prom / resp.length;
+  
+    try {
+      server.send("roberthalexander13@gmail.com", "Test email", "Este es un email de prueba..", "<p>Este es un <b>email</b> de prueba..</p>");
+      console.log("Sending...")
+    } catch (error) {
+      console.log("Error"+error)
+    }
+  
+  
   return { data: resp, count: resp.length, prom: Math.round(_prom) }
 }
 
