@@ -24,9 +24,11 @@ const getContent = async url => {
 
 async function getQuote(id){
   const result = await db.query(
-    `select * 
+    `select q.*, u.*, m.sname 
     from quotes q 
     join users u on q.user_id = u.id 
+    join versions v on v.id = q.version_id
+    join models m on m.id = v.model_id
     where q.id = ${id}`
   );
 
@@ -41,6 +43,8 @@ async function getTest(data){
   let resp = [];
   let _prom = 0;
   let _version = data.version;
+  let _model = data.model;
+
   await getContent(data.url)
   .then(content => {    
     let datas = content.html;
@@ -52,10 +56,10 @@ async function getTest(data){
       _items.forEach(element => {
         let _precio = element.querySelector(".ui-search-price__second-line .price-tag-fraction").textContent;
         let title = element.querySelector(".shops__item-title").textContent;
-        let title2 = title.split(" ");
+        let arrayTitle = title.split(" ");
         let _pp = parseInt(_precio.replace(/\./g, ''));
-        
-        if(_version.includes(title2[2])){
+
+        if(arrayTitle.includes(_model)){
           _prom += _pp;
           resp.push({
             title: title,
@@ -64,46 +68,15 @@ async function getTest(data){
         }
         
       });
-      // resp.sort(function(a, b) {
-      //   return a - b;
-      // });
     }
   })
   .catch(error => {
     console.error(error)
     process.exit(1)
   });
-  // if(resp.length > 0){
-  //   //Si OLX no dio resultados
-  //   if(!data.data_olx){
-  //     if(resp.length > 3){
-  //       let _base = (resp[0] + resp [1] + resp[2]) / 3;
-  //       _base = _base + (_base * 0.10);
-  //       let resp2 = [];
-  //       resp.forEach(val =>{
-  //         if(val <= _base)
-  //           resp2.push(val);
-  //       });
-  //       let _total = resp2.reduce((a, b) => a + b, 0);
-  //       console.log(_total);
-  //       _prom = _total / resp2.length;
-  //       resp = resp2;
-  //     }else{
-  //       _prom = _prom / (resp.length);
-  //     }      
-  //   }else{
-  //     _prom = _prom / (resp.length);
-  //   }    
-  // }
+
   if(resp.length > 0)
     _prom = _prom / resp.length;
-  
-    // try {
-    //   server.send("roberthalexander13@gmail.com", "Test email", "Este es un email de prueba..", "<p>Este es un <b>email</b> de prueba..</p>");
-    //   console.log("Sending...")
-    // } catch (error) {
-    //   console.log("Error"+error)
-    // }
   
   
   return { data: resp, count: resp.length, prom: Math.round(_prom) }
