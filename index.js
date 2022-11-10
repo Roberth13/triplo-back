@@ -21,8 +21,6 @@ app.use(
   })
 );
 
-
-
 // Add headers before the routes are defined
 app.use(function (req, res, next) {
 
@@ -160,5 +158,6 @@ app.use((err, req, res, next) => {
   return;
 });
 app.listen(process.env.PORT || 5000, () => {
-  console.log(`Listening in ${port}`);
+  const port = server.address().port;
+  console.log(`Express is working on port ${port}`);
 });
