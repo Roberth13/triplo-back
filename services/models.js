@@ -24,7 +24,7 @@ async function getModels(page){
 
 async function getModelsByYear(yearId){
   const result = await db.query(
-    `select m.id, m.name
+    `select m.id, m.name, m.sname
     from models m
     where m.year_id = ${yearId} ORDER by m.name asc;`
   );

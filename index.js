@@ -9,9 +9,10 @@ const versionsRoutes = require("./routes/versions");
 const modelsRoutes = require("./routes/models");
 const quotesRoutes = require("./routes/quotes");
 const findCarRoutes = require("./routes/findcar");
-const uploadRoutes = require("./routes/upload");
 const pricesRoutes = require("./routes/prices");
 const db = require('./services/db');
+const PDFDocument = require('pdfkit');
+const fs = require("fs");
 
 app.use(express.json());
 app.use(
@@ -19,6 +20,8 @@ app.use(
     extended: true,
   })
 );
+
+
 
 // Add headers before the routes are defined
 app.use(function (req, res, next) {
@@ -39,6 +42,13 @@ app.use(function (req, res, next) {
   // Pass to next layer of middleware
   next();
 });
+
+app.get("/api/v1/b64", function(req, res){
+
+  let buff = fs.readFileSync('fondo.png');
+  let base64data = buff.toString('base64');
+  res.send({src : base64data});
+})
 
 app.post('/api/v1/quotes/olxautos', function (req, res) {
   let _data = req.body;
@@ -93,6 +103,46 @@ app.post('/api/v1/versions/setversion', function (req, res) {
   .catch(err => console.error(err));
 });
 
+app.post("/api/v1/pdf", function(req, res){
+  try {
+    //Reciibir User (nombres, telefono, quote)
+    let _data = req.body;
+
+    const doc = new PDFDocument({size:'LETTER', margin:30});
+    doc.pipe (fs.createWriteStream ('testing.pdf'));
+    doc.image('fondo.png', 0, 0, {height: 792});
+
+    doc.fontSize(78);
+    doc.font('MangoGrotesque-SemiBold.otf')
+        .fillColor('#001821')
+        .text(_data.names+',', 150, 245)
+
+    doc.fontSize(15);
+    doc.font('AT Surt UltraBold.otf')
+        .fillColor('#ff8600')
+        .text(_data.price, 124, 412);
+
+    doc.fontSize(12);  
+    let text = "Agenda tu peritaje en el mensaje que te enviamos por WhatsApp o haciendo click aqui";
+    doc.font('at_s_regular.otf')
+        .fillColor('#c14717')
+        .text(text, 400, 655, {align: "right"});
+
+      doc.fontSize(12);  
+      text = "click aqui";
+      doc.font('at_s_regular.otf')
+          .fillColor('#c14717')
+            .text(text, 500, 683, {align: "right", link:"https://google.com/"+_data.phone});
+
+    doc.end();
+
+    //Guardar y retornar URL del PDF
+    res.json({msg: "true"});
+  } catch (error) {
+    res.json({msg: error});
+  }
+});
+
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/makes", makesRoutes);
 app.use("/api/v1/years", yearsRoutes);
@@ -100,7 +150,6 @@ app.use("/api/v1/versions", versionsRoutes);
 app.use("/api/v1/models", modelsRoutes);
 app.use("/api/v1/quotes", quotesRoutes);
 app.use("/api/v1/findcar", findCarRoutes);
-app.use("/api/v1/upload", uploadRoutes);
 app.use("/api/v1/prices", pricesRoutes);
 
 /* Error handler middleware */
@@ -111,5 +160,5 @@ app.use((err, req, res, next) => {
   return;
 });
 app.listen(process.env.PORT || 5000, () => {
-  console.log(`Example app listening ${port}`);
+  console.log(`Listening in ${port}`);
 });

@@ -24,7 +24,7 @@ const getContent = async url => {
 
 async function getQuote(id){
   const result = await db.query(
-    `select q.*, u.*, m.sname 
+    `select q.*, u.*, m.sname, v.key 
     from quotes q 
     join users u on q.user_id = u.id 
     join versions v on v.id = q.version_id
@@ -44,6 +44,7 @@ async function getTest(data){
   let _prom = 0;
   let _version = data.version;
   let _model = data.model;
+  let _keys = data.sname.split(",");
 
   await getContent(data.url)
   .then(content => {    
@@ -56,17 +57,13 @@ async function getTest(data){
       _items.forEach(element => {
         let _precio = element.querySelector(".ui-search-price__second-line .price-tag-fraction").textContent;
         let title = element.querySelector(".shops__item-title").textContent;
-        let arrayTitle = title.split(" ");
         let _pp = parseInt(_precio.replace(/\./g, ''));
 
-        if(arrayTitle.includes(_model)){
-          _prom += _pp;
-          resp.push({
-            title: title,
-            precop: _precio
-          });
-        }
-        
+        //Se guarda todo lo que llegue
+        resp.push({
+          title: title,
+          price: _pp
+        });
       });
     }
   })
@@ -74,6 +71,24 @@ async function getTest(data){
     console.error(error)
     process.exit(1)
   });
+
+  //Empezamos a comparar
+  if(_keys.length > 0){
+    _keys.forEach(_key => {
+      if(_key !== "all"){
+        if(_key.startsWith("-")){
+          let _key1 = _key.slice(1);  
+          resp = resp.filter(x => !x.title.toLowerCase().includes(_key1.toLowerCase()))
+        }else{
+          resp = resp.filter(x => x.title.toLowerCase().includes(_key.toLowerCase()))
+        }
+      }
+    });
+  }
+ 
+  resp.forEach(rr =>{
+    _prom += rr.price;
+  })
 
   if(resp.length > 0)
     _prom = _prom / resp.length;
