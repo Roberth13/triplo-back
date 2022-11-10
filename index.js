@@ -1,7 +1,6 @@
 const express = require("express");
 const fetch = require('node-fetch');
 const app = express();
-const port = 5000;
 const usersRoutes = require("./routes/users");
 const makesRoutes = require("./routes/makes");
 const yearsRoutes = require("./routes/years");
@@ -157,7 +156,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ message: err.message });
   return;
 });
-const server = app.listen(process.env.PORT || 5000, () => {
-  const port = server.address().port;
-  console.log(`Express is working on port ${port}`);
+var port = process.env.PORT || 8000;
+app.listen(port, () => {
+  console.log(`Listening in ${port}`);
 });
