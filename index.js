@@ -156,7 +156,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ message: err.message });
   return;
 });
-var port = process.env.PORT || 8000;
+var port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Listening in ${port}`);
 });

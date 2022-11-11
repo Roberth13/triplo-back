@@ -4,7 +4,6 @@ const createBrowserless = require('browserless')
 const getHTML = require('html-get')
 const browserlessFactory = createBrowserless()
 var HTMLParser = require('node-html-parser');
-const server = require('./server');
 
 process.on('exit', () => {
   console.log('closing resources!')
@@ -76,7 +75,20 @@ async function getTest(data){
     console.error(error)
     process.exit(1)
   });
-
+  //Empezamos a comparar
+  if(_keys.length > 0){
+    _keys.forEach(_key => {
+      if(_key !== "all"){
+        if(_key.startsWith("-")){
+          let _key1 = _key.slice(1);  
+          resp = resp.filter(x => !x.title.toLowerCase().includes(_key1.toLowerCase()))
+        }else{
+          resp = resp.filter(x => x.title.toLowerCase().includes(_key.toLowerCase()))
+        }
+      }
+    });
+  }
+  
   let _cont = 0;
   if(resp.length > 1){
     resp.forEach(rr =>{
@@ -85,21 +97,6 @@ async function getTest(data){
     _prom = _prom / resp.length;
     let _min = _prom - (_prom * 0.25);
     let _max = _prom + (_prom * 0.20);
-
-
-    //Empezamos a comparar
-    if(_keys.length > 0){
-      _keys.forEach(_key => {
-        if(_key !== "all"){
-          if(_key.startsWith("-")){
-            let _key1 = _key.slice(1);  
-            resp = resp.filter(x => !x.title.toLowerCase().includes(_key1.toLowerCase()))
-          }else{
-            resp = resp.filter(x => x.title.toLowerCase().includes(_key.toLowerCase()))
-          }
-        }
-      });
-    }
  
     _prom = 0;    
     resp.forEach(rr =>{
