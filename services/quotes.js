@@ -76,21 +76,28 @@ async function getTest(data){
     process.exit(1)
   });
   //Empezamos a comparar
+  let respFilt = [];
   if(_keys.length > 0){
     _keys.forEach(_key => {
-      if(_key !== "all"){
+      let filts = [];
+      if(_key !== "all"){        
         if(_key.startsWith("-")){
           let _key1 = _key.slice(1);  
-          resp = resp.filter(x => !x.title.toLowerCase().includes(_key1.toLowerCase()))
+          filts = resp.filter(x => !x.title.toLowerCase().includes(_key1.toLowerCase()));          
         }else{
-          resp = resp.filter(x => x.title.toLowerCase().includes(_key.toLowerCase()))
+          filts = resp.filter(x => x.title.toLowerCase().includes(_key.toLowerCase()));
         }
+        respFilt= respFilt.concat(filts);
+      }else{
+        respFilt= respFilt.concat(resp);
       }
     });
   }
-  
+  resp = respFilt;
+  console.log(resp);
+
   let _cont = 0;
-  if(resp.length > 1){
+  if(resp.length >= 1){
     resp.forEach(rr =>{
       _prom += rr.price;
     })

@@ -12,6 +12,7 @@ const pricesRoutes = require("./routes/prices");
 const db = require('./services/db');
 const PDFDocument = require('pdfkit');
 const fs = require("fs");
+const server = require('./services/server');
 
 app.use(express.json());
 app.use(
@@ -47,23 +48,36 @@ app.get("/api/v1/b64", function(req, res){
   res.send({src : base64data});
 })
 
-app.post('/api/v1/quotes/olxautos', function (req, res) {
+app.post('/api/v1/quotes/olxautos', async function (req, res) {
   let _data = req.body;
   let opt = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       query: `
-        {quote(country: "${_data.country}",make: "${_data.make}",model: "${_data.model}", year: ${_data.year}, trim: "${_data.trim}", sellable: ${_data.sellable}){quote}}
+        {quote(country:"CO",make:"VOLKSWAGEN",model:"GOL HATCHBACK",year:2017,trim:"Highline 1.6L EE 4VE RA16",sellable:SELLABLE){quote,variant,priceText}}
       `,
     }),
   }
-  fetch('https://www.olxautos.com.co/api/cardata/', opt)
-  .then(response => response.json())
-  .then(response => {
-    res.send(response.data.quote);
-  })
-  .catch(err => console.error(err));
+  const rr = await fetch('https://www.olxautos.com.co/api/cardata/', opt);
+  const data = await rr.json();
+  console.log(data);
+  res.send(true);
+  // fetch('https://www.olxautos.com.co/api/cardata/', opt)
+  // .then(response => {
+  //   console.log("1", response);
+  //   if (!response) {
+  //     throw new Error('Network response was not OK');
+  //   }
+  //   return response.data;
+  // })
+  // .then(response => {
+  //   console.log(response);
+  //   res.send(response.data.quote);
+  // })
+  // .catch(err => {
+  //   res.send(err);
+  // });
 });
 
 app.post('/api/v1/versions/setversion', function (req, res) {
@@ -114,7 +128,7 @@ app.post("/api/v1/pdf", function(req, res){
         .fillColor('#001821')
         .text(_data.names+',', 150, 245)
 
-    doc.fontSize(15);
+    doc.fontSize(14);
     doc.font('AT Surt UltraBold.otf')
         .fillColor('#ff8600')
         .text(_data.price, 124, 412);
@@ -129,9 +143,16 @@ app.post("/api/v1/pdf", function(req, res){
       text = "click aqui";
       doc.font('at_s_regular.otf')
           .fillColor('#c14717')
-            .text(text, 500, 683, {align: "right", link:"https://google.com/"+_data.phone});
+            .text(text, 500, 683, {align: "right", link:"https://google.com/"});
 
     doc.end();
+
+    try {
+      server.send(_data.email, "¡Ya estas cerca!", "Este es un email de prueba..", "<p>Este es un <b>email</b> de prueba..</p>");
+      console.log("Sending...")
+    } catch (error) {
+      console.log("Error"+error)
+    }
 
     //Guardar y retornar URL del PDF
     res.json({msg: "true"});
@@ -156,7 +177,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ message: err.message });
   return;
 });
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Listening in ${port}`);
 });
